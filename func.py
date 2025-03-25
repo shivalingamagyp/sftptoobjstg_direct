@@ -1,21 +1,30 @@
-import io
+import paramiko
 import json
-import logging
-
 from fdk import response
 
+SFTP_HOST = "test.rebex.net"
+SFTP_PORT = 22
+SFTP_USERNAME = "demo"
+SFTP_PASSWORD = "password"
 
-def handler(ctx, data: io.BytesIO=None):
-    name = "World"
+def handler(ctx, data=None):
     try:
-        body = json.loads(data.getvalue())
-        name = body.get("name")
-    except (Exception, ValueError) as ex:
-        logging.getLogger().info('error parsing json payload: ' + str(ex))
+        transport = paramiko.Transport((SFTP_HOST, SFTP_PORT))
+        transport.connect(username=SFTP_USERNAME, password=SFTP_PASSWORD)
+        sftp = paramiko.SFTPClient.from_transport(transport)
 
-    logging.getLogger().info("Inside Python Hello World function")
-    return response.Response(
-        ctx, response_data=json.dumps(
-            {"message": "Hello {0}".format(name)}),
-        headers={"Content-Type": "application/json"}
-    )
+        # List files in home directory
+        files = sftp.listdir()
+
+        sftp.close()
+        transport.close()
+
+        return response.Response(
+            ctx, response_data=json.dumps({"files": files}),
+            headers={"Content-Type": "application/json"}
+        )
+    except Exception as e:
+        return response.Response(
+            ctx, response_data=json.dumps({"error": str(e)}),
+            headers={"Content-Type": "application/json"}
+        )
