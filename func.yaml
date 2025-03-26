@@ -3,5 +3,5 @@ name: sftp_to_oci
 version: 0.0.1
 runtime: python
 entrypoint: func.handler
-memory: 256MB
+memory: 256
 timeout: 60
