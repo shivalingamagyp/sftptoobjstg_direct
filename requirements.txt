@@ -1,2 +1,3 @@
 paramiko
 oci
+fdk>=0.1.21
