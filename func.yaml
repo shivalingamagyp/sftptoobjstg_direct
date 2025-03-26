@@ -1,7 +1,7 @@
 schema_version: 20180708
-name: sftp_to_oci_objectstorage
+name: sftp_to_oci
 version: 0.0.1
 runtime: python
-entrypoint: /python/bin/fdk /function/func.py handler
-memory: 1024
-timeout: 300
+entrypoint: func.handler
+memory: 256MB
+timeout: 60
