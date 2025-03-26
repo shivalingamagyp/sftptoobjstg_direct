@@ -5,5 +5,5 @@ runtime: python
 build_image: fnproject/python:3.11-dev
 run_image: fnproject/python:3.11
 entrypoint: func.handler
-memory: 1024
+memory: 3072
 timeout: 60
